@@ -29,7 +29,7 @@ jobs:
         working-directory: crglst
         
       - uses: actions/checkout@master
-      - uses: HarTigran/Finalproject@master
+      - uses: jakejarvis/s3-sync-action@master
       
         with:
           args: --acl public-read --follow-symlinks --delete --exclude '.git*/*'
