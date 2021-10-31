@@ -1,1 +1,5 @@
 .idea
+/data/cars_test/
+/data/cars_train/
+/models/notebooks/.ipynb_checkpoints/
+/models/notebooks/lightning_logs/
