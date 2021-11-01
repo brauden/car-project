@@ -12,6 +12,14 @@ BOT_NAME = 'crglst'
 SPIDER_MODULES = ['crglst.spiders']
 NEWSPIDER_MODULE = 'crglst.spiders'
 
+#pipline
+
+ITEM_PIPELINES = {'scrapy.pipelines.images.ImagesPipeline': 1}
+
+#folder
+
+IMAGES_STORE = '/Finalproject/csv_files/images'
+
 #Added from Stackoverflow --> https://stackoverflow.com/questions/65295966/craigslist-403-blocking-urlopen-but-not-requests-ge  
 
 DOWNLOADER_CLIENT_TLS_METHOD = "TLSv1.2"
