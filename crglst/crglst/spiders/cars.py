@@ -17,26 +17,26 @@ class ExploitSpider(scrapy.Spider):
     
     def __init__(self):
         page_number = 120
-        urls =  ['https://raleigh.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1']#,
-                    # 'https://NewYork.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
-                    # 'https://LosAngeles.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
-                    # 'https://LosAngeles.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
-                    # 'https://Chicago.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
-                    # 'https://Houston.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
-                    # 'https://Phoenix.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
-                    # 'https://Philadelphia.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
-                    # 'https://SanAntonio.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
-                    # 'https://SanDiego.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
-                    # 'https://Dallas.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
-                    # 'https://Austin.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
-                    # 'https://Jacksonville.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
-                    # 'https://Columbus.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
-                    # 'https://Charlotte.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
-                    # 'https://SanFrancisco.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
-                    # 'https://Indianapolis.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
-                    # 'https://Seattle.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
-                    # 'https://Denver.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1'
-                    # ]
+        urls =  ['https://raleigh.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
+                    'https://NewYork.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
+                    'https://LosAngeles.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
+                    'https://LosAngeles.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
+                    'https://Chicago.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
+                    'https://Houston.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
+                    'https://Phoenix.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
+                    'https://Philadelphia.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
+                    'https://SanAntonio.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
+                    'https://SanDiego.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
+                    'https://Dallas.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
+                    'https://Austin.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
+                    'https://Jacksonville.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
+                    'https://Columbus.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
+                    'https://Charlotte.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
+                    'https://SanFrancisco.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
+                    'https://Indianapolis.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
+                    'https://Seattle.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1',
+                    'https://Denver.craigslist.org/d/cars-trucks-by-owner/search/cto?hasPic=1'
+                    ]
         for url in urls:
             self.start_urls.append(url)
             for i in range(1,25):
@@ -76,11 +76,11 @@ class ExploitSpider(scrapy.Spider):
         #         yield response.follow(next_page, callback = self.parse,dont_filter=True)
 
        
-def append_csv_file(car_year_name,car_price):
-    line = f"{car_year_name} - {car_price}\n"
-    if not os.path.exists(csv_file):
-        with open(csv_file, 'w') as _f:
-            _f.write(line)
-        return
-    with open(csv_file, 'a') as _f:
-        _f.write(line)
+# def append_csv_file(car_year_name,car_price):
+#     line = f"{car_year_name} - {car_price}\n"
+#     if not os.path.exists(csv_file):
+#         with open(csv_file, 'w') as _f:
+#             _f.write(line)
+#         return
+#     with open(csv_file, 'a') as _f:
+#         _f.write(line)
