@@ -11,3 +11,5 @@ class CrglstItem(scrapy.Item):
     # name = scrapy.Field()
     car_year_name = scrapy.Field()
     car_price = scrapy.Field()
+    file_urls = scrapy.Field()
+    files = scrapy.Field()

@@ -18,7 +18,8 @@ ITEM_PIPELINES = {'scrapy.pipelines.images.ImagesPipeline': 1}
 
 #folder
 
-IMAGES_STORE = '/Finalproject/csv_files/images'
+IMAGES_STORE = 's3://crglst-csv/images'
+IMAGES_STORE_S3_ACL = 'public-read' 
 
 #Added from Stackoverflow --> https://stackoverflow.com/questions/65295966/craigslist-403-blocking-urlopen-but-not-requests-ge  
 

@@ -2,6 +2,7 @@ import scrapy
 from ..items import CrglstItem
 import os
 from os.path import dirname
+from urllib.parse import urljoin
 
 current_dir = os.path.dirname(__file__)
 top_dir = dirname(dirname(dirname(current_dir)))
@@ -51,13 +52,15 @@ class ExploitSpider(scrapy.Spider):
         items = CrglstItem()
         car_year_name = response.css('.hdrlnk::text').extract()
         car_price = response.css('.result-meta .result-price').css('::text').extract()
-        # d_car_urls = response.css('img ::attr(src)').getall()
-        # car_img_urls = []
-        # for img_url in d_car_urls:
-        #     car_img_urls.append(response.urljoin(img_url))
-        # yield {
-        #     'image_urls': car_img_urls 
-        # }
+        car_urls = response.xpath('//a/@data-ids').extract()
+
+    # make each one into a full URL and add to item[]
+               
+        # d_car_urls = response.selector.xpath('//img/@src').extract() #('img::attr("src")').extract()
+        # img_urls = [urljoin(response.url, src)
+        #                 for src in d_car_urls]
+        # items['image_urls'] = img_urls
+
         #car_total = response.css('.totalcount::text').extract()
         #car_info = response.css('.result-meta .result-price , .hdrlnk').css('::text').extract()
         # for i in range(len(car_price)):
@@ -65,6 +68,11 @@ class ExploitSpider(scrapy.Spider):
         for i in range(len(car_price)):
             items['car_year_name'] = car_year_name[i]
             items['car_price'] = car_price[i]
+            if ',' in car_urls[i]:
+                lst = ["https://images.craigslist.org/{}_300x300.jpg".format(i[2:]) for i in car_urls[i].split(',')]
+                items['file_urls'] = lst
+            else:
+                items['file_urls'] = "https://images.craigslist.org/" + car_urls[i][2:] + "_300x300.jpg"
             yield items
         #print('{} - {}'. format(car_year_name,car_price))
         
