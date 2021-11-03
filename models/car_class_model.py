@@ -1,3 +1,4 @@
+import datetime
 import torch.nn as nn
 import torch.optim as optim
 import torchmetrics as tm
@@ -9,6 +10,7 @@ from torchvision.io import read_image
 from torchvision import transforms
 from torch.utils.data import Dataset, DataLoader
 from sklearn.model_selection import train_test_split
+from argparse import ArgumentParser
 
 
 class CarDataset(Dataset):
@@ -29,12 +31,15 @@ class CarDataset(Dataset):
 
 
 class CarClassification(pl.LightningModule):
+    """
+    ResNet 50 based NN.
+    """
     def __init__(self, num_of_classes,
                  train_df: pd.DataFrame,
                  valid_df: pd.DataFrame,
-                 lr=1e-3, transfer=True,
-                 tune_fc=True, hidden_layers=524,
-                 optimizer=optim.Adam, batch_size=32):
+                 batch_size=32, lr=1e-3, hidden_layers=524,
+                 transfer=True, tune_fc=True,
+                 optimizer=optim.Adam):
         super(CarClassification, self).__init__()
         self.train_df = train_df
         self.valid_df = valid_df
@@ -77,13 +82,13 @@ class CarClassification(pl.LightningModule):
         preds = self(x)
         loss = self.criterion(preds, y)
         max_vals, argmax = preds.max(-1)
-        accuracy_metrics = tm.Accuracy()
-        accuracy = accuracy_metrics(argmax, y).to(self.device)
+        accuracy_metrics = tm.functional.accuracy
+        accuracy = accuracy_metrics(argmax, y)
         self.log("train_loss", loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
         self.log("train_accuracy", accuracy, on_step=True, on_epoch=True, prog_bar=True, logger=True)
         return loss
 
-    def valid_dataloader(self):
+    def val_dataloader(self):
         transform = transforms.Compose([
             transforms.Resize((256, 256)),
             transforms.Lambda(lambda x: x / 255.)
@@ -91,21 +96,26 @@ class CarClassification(pl.LightningModule):
         img_val = CarDataset(self.valid_df, transform=transform)
         return DataLoader(img_val, batch_size=1, shuffle=False)
 
-    def valid_step(self, batch, batch_idx):
+    def validation_step(self, batch, batch_idx):
         x, y = batch
         y = y.long()
         preds = self(x)
         max_vals, argmax = preds.max(-1)
         loss = self.criterion(preds, y)
-        accuracy_metrics = tm.Accuracy()
-        accuracy = accuracy_metrics(argmax, y).to(self.device)
+        accuracy_metrics = tm.functional.accuracy
+        accuracy = accuracy_metrics(argmax, y)
         self.log("val_loss", loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
         self.log("valid_accuracy", accuracy, on_step=True, on_epoch=True, prog_bar=True, logger=True)
         return loss
 
 
 if __name__ == '__main__':
-    annotation_df = pd.read_parquet("../data/annotation.parquet")
+    arg_parse = ArgumentParser()
+    arg_parse.add_argument("num_epochs", help="Number epochs", type=int)
+    arg_parse.add_argument("--lr", help="Learning rate", type=float, default=1e-3)
+    arg_parse.add_argument("--bs", help="Batch size", type=int, default=32)
+    args = arg_parse.parse_args()
+    annotation_df = pd.read_parquet("./data/annotation.parquet")
     nr_of_classes = annotation_df['class'].nunique()
     train_df, valid_df = train_test_split(annotation_df,
                                           test_size=0.2,
@@ -116,6 +126,12 @@ if __name__ == '__main__':
     valid_df.reset_index(inplace=True)
     train_df.drop("index", axis=1, inplace=True)
     valid_df.drop("index", axis=1, inplace=True)
-    model = CarClassification(nr_of_classes, train_df=train_df, valid_df=valid_df)
-    trainer = pl.Trainer(gpus=1, max_epochs=3, progress_bar_refresh_rate=20)
+    model = CarClassification(nr_of_classes,
+                              train_df=train_df,
+                              valid_df=valid_df,
+                              batch_size=args.bs,
+                              lr=args.lr)
+    trainer = pl.Trainer(gpus=1, max_epochs=args.num_epochs, progress_bar_refresh_rate=20)
     trainer.fit(model)
+    now = str(datetime.datetime.now())
+    trainer.save_checkpoint(f"./data/model/trained_model_{now}.ckpt")

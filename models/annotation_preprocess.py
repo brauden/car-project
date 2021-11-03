@@ -6,7 +6,7 @@ from pathlib import Path
 from torchvision.io import read_image
 
 # Constants
-DATA_PATH = Path("../data")
+DATA_PATH = Path("./data")
 ANNOTATION_TRAIN = DATA_PATH / "cars_train_annos.mat"
 TRAIN_PATH = DATA_PATH / "cars_train"
 
