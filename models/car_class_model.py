@@ -5,7 +5,7 @@ import torchmetrics as tm
 import pytorch_lightning as pl
 import pandas as pd
 
-from torchvision.models import resnet50
+from torchvision.models import resnet50, resnet18
 from torchvision.io import read_image
 from torchvision import transforms
 from torch.utils.data import Dataset, DataLoader
@@ -43,7 +43,7 @@ class CarClassification(pl.LightningModule):
         super(CarClassification, self).__init__()
         self.train_df = train_df
         self.valid_df = valid_df
-        self.resnet = resnet50(pretrained=transfer)
+        self.resnet = resnet18(pretrained=transfer)
         self.in_features = self.resnet.fc.in_features
         self.optimizer = optimizer
         self.criterion = nn.CrossEntropyLoss()
