@@ -1,4 +1,5 @@
 import numpy as np
+import pickle
 from sklearn.neighbors import NearestNeighbors
 
 neighbors = NearestNeighbors(n_neighbors=5, algorithm='brute', metric='euclidean')
@@ -16,3 +17,6 @@ if __name__ == '__main__':
     neighbors.fit(vectors)
     dist, indices = neighbors.kneighbors(test_image.reshape(1, -1))
     print(names[np.sort(indices[0])])
+
+    with open("../data/similarity_model.pickle", "wb") as model:
+        pickle.dump(neighbors, model)
