@@ -65,7 +65,7 @@ if __name__ == '__main__':
     print("Num of images: ", len(all_images))
     images_list = []
     images_name = []
-    for image in tqdm(all_images[:300]):
+    for image in tqdm(all_images):
         img = read_image(image)
         img = transform(img)
         if img.shape == torch.Size([3, 256, 256]):
