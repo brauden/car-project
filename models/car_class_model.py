@@ -5,7 +5,7 @@ import torchmetrics as tm
 import pytorch_lightning as pl
 import pandas as pd
 
-from torchvision.models import resnet50, resnet18
+from torchvision.models import resnet18
 from torchvision.io import read_image
 from torchvision import transforms
 from torch.utils.data import Dataset, DataLoader
